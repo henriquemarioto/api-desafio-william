@@ -28,7 +28,7 @@ class PeopleController {
       cellphone,
       address,
       comments,
-    }, req);
+    }, req.file);
 
     return res.status(201).json(people);
   }
