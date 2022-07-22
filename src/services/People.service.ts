@@ -30,7 +30,7 @@ class PeopleService {
       throw new AppError("People with this cellphone already exists", 409);
     }
 
-    const imagePath = await saveImage(file)
+    const image_url = await saveImage(file);
 
     const newPeople = new People();
     newPeople.full_name = full_name;
@@ -44,7 +44,7 @@ class PeopleService {
     peopleRepository.create(newPeople);
     await peopleRepository.save(newPeople);
 
-    return { ...newPeople, image_url: imagePath };
+    return { ...newPeople, image_url };
   }
 
   static async list() {
