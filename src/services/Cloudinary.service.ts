@@ -2,9 +2,9 @@ import cloudinary from "cloudinary";
 import AppError from "../errors/AppError";
 
 cloudinary.v2.config({
-  cloud_name: "dpspbfi2p",
-  api_key: "339855762382827",
-  api_secret: "92VeBSaTV0DhOSNcy4n_23XhY08",
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
   secure: true,
 });
 
