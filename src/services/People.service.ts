@@ -1,9 +1,13 @@
+import express from 'express';
+import path from 'path';
 import { verifyPeopleExists } from "./../errors/people.errors";
 import AppError from "../errors/AppError";
 import People from "../models/People";
 import { peopleRepository } from "../repositories/people.repositories";
 import { AppDataSource } from "./../data-source";
 import { ICreateProple, IUpdatePeople } from "./../interfaces/people/index";
+import Resize from '../utils/Resize';
+import { Request } from 'express';
 
 class PeopleService {
   static async create({
@@ -14,7 +18,7 @@ class PeopleService {
     cellphone,
     address,
     comments,
-  }: ICreateProple) {
+  }: ICreateProple, req: Request) {
     const cpfAlreadyExists = await peopleRepository.findOne({ where: { cpf } });
 
     if (cpfAlreadyExists) {
@@ -29,6 +33,10 @@ class PeopleService {
       throw new AppError("People with this cellphone already exists", 409);
     }
 
+    const imagePath = path.join(__dirname, "../public/images");
+    const fileUpload = new Resize(imagePath);
+    const filename = await fileUpload.save(req.file?.buffer);
+
     const newPeople = new People();
     newPeople.full_name = full_name;
     newPeople.cpf = cpf;
@@ -41,7 +49,7 @@ class PeopleService {
     peopleRepository.create(newPeople);
     await peopleRepository.save(newPeople);
 
-    return newPeople;
+    return {...newPeople, image_url: path.join(__dirname, `../public/images/${filename}`)};
   }
 
   static async list() {

@@ -4,11 +4,13 @@ import createPeopleValidator from "../validations/people/createPeople.validation
 import PeopleController from "../controllers/People.controller";
 import updateEmployeeSchema from "../validations/people/updatePeople.validation";
 import validUuidParams from "../validations/validUuidParams.validation";
+import upload from "../middlewares/upload.middleware";
 
 const peopleRouter = Router();
 
 peopleRouter.post(
   "/",
+  upload.single("image"),
   expressYupMiddleware({ schemaValidator: createPeopleValidator }),
   PeopleController.create
 );

@@ -1,6 +1,8 @@
+import path from 'path';
 import { ICreateProple, IUpdatePeople } from "./../interfaces/people/index";
 import { Request, Response } from "express";
 import PeopleService from "../services/People.service";
+import Resize from "../utils/Resize";
 
 class PeopleController {
   static async create(req: Request, res: Response) {
@@ -13,6 +15,10 @@ class PeopleController {
       address,
       comments = null,
     }: ICreateProple = req.body;
+    
+    if (!req.file) {
+      return res.status(400).json({error: 'Please provide an image'});
+    }
 
     const people = await PeopleService.create({
       full_name,
@@ -22,7 +28,7 @@ class PeopleController {
       cellphone,
       address,
       comments,
-    });
+    }, req);
 
     return res.status(201).json(people);
   }
