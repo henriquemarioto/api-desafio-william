@@ -4,18 +4,21 @@ import People from "../models/People";
 import { peopleRepository } from "../repositories/people.repositories";
 import { AppDataSource } from "./../data-source";
 import { ICreateProple, IUpdatePeople } from "./../interfaces/people/index";
-import saveImage from '../utils/saveImage';
+import saveImage from "../utils/saveImage";
 
 class PeopleService {
-  static async create({
-    full_name,
-    cpf,
-    surname,
-    gender,
-    cellphone,
-    address,
-    comments,
-  }: ICreateProple, file: any) {
+  static async create(
+    {
+      full_name,
+      cpf,
+      surname,
+      gender,
+      cellphone,
+      address,
+      comments,
+    }: ICreateProple,
+    file: any
+  ) {
     const cpfAlreadyExists = await peopleRepository.findOne({ where: { cpf } });
 
     if (cpfAlreadyExists) {
@@ -40,11 +43,12 @@ class PeopleService {
     newPeople.cellphone = cellphone;
     newPeople.address = address;
     newPeople.comments = comments;
+    newPeople.image_url = image_url;
 
     peopleRepository.create(newPeople);
     await peopleRepository.save(newPeople);
 
-    return { ...newPeople, image_url };
+    return { ...newPeople };
   }
 
   static async list() {
