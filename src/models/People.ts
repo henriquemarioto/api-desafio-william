@@ -32,6 +32,9 @@ class People {
   @Column({ type: 'character varying' || null, length: 255, nullable: true })
   comments: string | null;
 
+  @Column({length: 255})
+  image_url: string;
+
   @CreateDateColumn()
   created_at: Date;
 
